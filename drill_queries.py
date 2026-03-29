@@ -1,0 +1,60 @@
+import sqlite3
+
+def top_departments(db_path):
+    """Task 1 — Top 3 departments by total salary expenditure"""
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
+    query = """
+        SELECT d.name, SUM(e.salary) AS total_salary
+        FROM departments d
+        JOIN employees e ON d.dept_id = e.dept_id
+        GROUP BY d.dept_id, d.name
+        ORDER BY total_salary DESC
+        LIMIT 3
+    """
+    
+    cursor.execute(query)
+    results = cursor.fetchall()
+    conn.close()
+    return results
+
+
+def employees_with_projects(db_path):
+    """Task 2 — Employees and their projects (INNER JOIN across 3 tables)"""
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
+    query = """
+        SELECT e.name AS employee_name, p.name AS project_name
+        FROM employees e
+        JOIN project_assignments pa ON e.emp_id = pa.emp_id
+        JOIN projects p ON pa.project_id = p.project_id
+    """
+    
+    cursor.execute(query)
+    results = cursor.fetchall()
+    conn.close()
+    return results
+
+
+def salary_rank_by_department(db_path):
+    """Task 3 — Salary rank using window function"""
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
+    query = """
+        SELECT 
+            e.name AS employee_name,
+            d.name AS dept_name,
+            e.salary,
+            RANK() OVER (PARTITION BY e.dept_id ORDER BY e.salary DESC) AS rank
+        FROM employees e
+        JOIN departments d ON e.dept_id = d.dept_id
+        ORDER BY d.name, rank
+    """
+    
+    cursor.execute(query)
+    results = cursor.fetchall()
+    conn.close()
+    return results
