@@ -1,7 +1,6 @@
 import sqlite3
 
 def top_departments(db_path):
-    """Task 1 — Top 3 departments by total salary expenditure"""
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
@@ -21,7 +20,6 @@ def top_departments(db_path):
 
 
 def employees_with_projects(db_path):
-    """Task 2 — Employees and their projects (INNER JOIN across 3 tables)"""
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
@@ -39,7 +37,6 @@ def employees_with_projects(db_path):
 
 
 def salary_rank_by_department(db_path):
-    """Task 3 — Salary rank using window function"""
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
